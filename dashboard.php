@@ -10,9 +10,9 @@ $orderSql = "SELECT * FROM orders WHERE order_status = 1";
 $orderQuery = $connect->query($orderSql);
 $countOrder = $orderQuery->num_rows;
 
-$totalRevenue = "";
+$totalRevenue = 0;
 while ($orderResult = $orderQuery->fetch_assoc()) {
-	$totalRevenue += $orderResult['paid'];
+    $totalRevenue += $orderResult['paid'];
 }
 
 $lowStockSql = "SELECT * FROM product WHERE quantity <= 3 AND status = 1";
@@ -27,149 +27,143 @@ $connect->close();
 
 ?>
 
-
 <style type="text/css">
-	.ui-datepicker-calendar {
-		display: none;
-	}
+    .ui-datepicker-calendar {
+        display: none;
+    }
 </style>
 
 <!-- fullCalendar 2.2.5-->
-    <link rel="stylesheet" href="assests/plugins/fullcalendar/fullcalendar.min.css">
-    <link rel="stylesheet" href="assests/plugins/fullcalendar/fullcalendar.print.css" media="print">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.print.css" media="print">
 
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">
+                    <a href="product.php" class="text-white" style="text-decoration:none;">
+                        <i class="fas fa-box"></i> تعداد کل محصولات
+                        <span class="badge badge-light float-right"><?php echo $countProduct; ?></span>    
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-header">
+                    <a href="product.php" class="text-white" style="text-decoration:none;">
+                        <i class="fas fa-exclamation-triangle"></i> موجودی کم
+                        <span class="badge badge-light float-right"><?php echo $countLowStock; ?></span>    
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-header">
+                    <a href="orders.php?o=manord" class="text-white" style="text-decoration:none;">
+                        <i class="fas fa-shopping-cart"></i> تعداد کل سفارشات
+                        <span class="badge badge-light float-right"><?php echo $countOrder; ?></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<div class="row">
-	<?php  if(isset($_SESSION['userId']) && $_SESSION['userId']==1) { ?>
-	<div class="col-md-4">
-		<div class="panel panel-success">
-			<div class="panel-heading">
-				
-				<a href="product.php" style="text-decoration:none;color:black;">
-					Total Product
-					<span class="badge pull pull-right"><?php echo $countProduct; ?></span>	
-				</a>
-				
-			</div> <!--/panel-hdeaing-->
-		</div> <!--/panel-->
-	</div> <!--/col-md-4-->
-	
-	<div class="col-md-4">
-		<div class="panel panel-danger">
-			<div class="panel-heading">
-				<a href="product.php" style="text-decoration:none;color:black;">
-					Low Stock
-					<span class="badge pull pull-right"><?php echo $countLowStock; ?></span>	
-				</a>
-				
-			</div> <!--/panel-hdeaing-->
-		</div> <!--/panel-->
-	</div> <!--/col-md-4-->
-	
-	
-	<?php } ?>  
-		<div class="col-md-4">
-			<div class="panel panel-info">
-			<div class="panel-heading">
-				<a href="orders.php?o=manord" style="text-decoration:none;color:black;">
-					Total Orders
-					<span class="badge pull pull-right"><?php echo $countOrder; ?></span>
-				</a>
-					
-			</div> <!--/panel-hdeaing-->
-		</div> <!--/panel-->
-		</div> <!--/col-md-4-->
-
-	
-
-	<div class="col-md-4">
-		<div class="card">
-		  <div class="cardHeader">
-		    <h1><?php echo date('d'); ?></h1>
-		  </div>
-
-		  <div class="cardContainer">
-		    <p><?php echo date('l') .' '.date('d').', '.date('Y'); ?></p>
-		  </div>
-		</div> 
-		<br/>
-
-		<div class="card">
-		  <div class="cardHeader" style="background-color:#245580;">
-		    <h1><?php if($totalRevenue) {
-		    	echo $totalRevenue;
-		    	} else {
-		    		echo '0';
-		    		} ?></h1>
-		  </div>
-
-		  <div class="cardContainer">
-		    <p> INR Total Revenue</p>
-		  </div>
-		</div> 
-
-	</div>
-	
-	<?php  if(isset($_SESSION['userId']) && $_SESSION['userId']==1) { ?>
-	<div class="col-md-8">
-		<div class="panel panel-default">
-			<div class="panel-heading"> <i class="glyphicon glyphicon-calendar"></i> User Wise Order</div>
-			<div class="panel-body">
-				<table class="table" id="productTable">
-			  	<thead>
-			  		<tr>			  			
-			  			<th style="width:40%;">Name</th>
-			  			<th style="width:20%;">Orders in Rupees</th>
-			  		</tr>
-			  	</thead>
-			  	<tbody>
-					<?php while ($orderResult = $userwiseQuery->fetch_assoc()) { ?>
-						<tr>
-							<td><?php echo $orderResult['username']?></td>
-							<td><?php echo $orderResult['totalorder']?></td>
-							
-						</tr>
-						
-					<?php } ?>
-				</tbody>
-				</table>
-				<!--<div id="calendar"></div>-->
-			</div>	
-		</div>
-		
-	</div> 
-	<?php  } ?>
-	
-</div> <!--/row-->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header"> <i class="fas fa-users"></i> سفارشات به تفکیک کاربر</div>
+                <div class="card-body">
+                    <table class="table table-bordered" id="productTable">
+                    <thead>
+                        <tr>                      
+                            <th style="width:30%;">نام</th>
+                            <th style="width:30%;">سفارشات به تومان</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php while ($orderResult = $userwiseQuery->fetch_assoc()) { ?>
+                            <tr>
+                                <td><?php echo $orderResult['username']?></td>
+                                <td><?php echo $orderResult['totalorder']?></td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                    </table>
+                </div>    
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="cardHeader">
+                    <h1 id="jalali-day"></h1>
+                </div>
+                <div class="cardContainer">
+                    <p id="jalali-date"></p>
+                </div>
+            </div> 
+            <!-- <br/> -->
+            <div class="card mb-3">
+                <div class="cardHeader" style="background-color:#245580;">
+                    <h1><?php if($totalRevenue) {
+                        echo $totalRevenue;
+                        } else {
+                            echo '0';
+                            } ?></h1>
+                </div>
+                <div class="cardContainer">
+                    <p>کل درآمد به تومان</p>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
 
 <!-- fullCalendar 2.2.5 -->
-<script src="assests/plugins/moment/moment.min.js"></script>
-<script src="assests/plugins/fullcalendar/fullcalendar.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jalaali-js@1.2.7/dist/jalaali.min.js"></script>
 
 <script type="text/javascript">
-	$(function () {
-			// top bar active
-	$('#navDashboard').addClass('active');
+    $(function () {
+        // top bar active
+        $('#navDashboard').addClass('active');
 
-      //Date for the calendar events (dummy data)
-      var date = new Date();
-      var d = date.getDate(),
-      m = date.getMonth(),
-      y = date.getFullYear();
+        //Date for the calendar events (dummy data)
+        var date = new Date();
+        var d = date.getDate(),
+        m = date.getMonth(),
+        y = date.getFullYear();
 
-      $('#calendar').fullCalendar({
-        header: {
-          left: '',
-          center: 'title'
-        },
-        buttonText: {
-          today: 'today',
-          month: 'month'          
-        }        
-      });
+        // Convert Gregorian date to Jalali date
+        var jalaliDate = jalaali.toJalaali(y, m + 1, d);
+        var jalaliDay = jalaliDate.jd;
+        var jalaliMonth = jalaliDate.jm;
+        var jalaliYear = jalaliDate.jy;
 
+        // Map Jalali month number to month name
+        var jalaliMonthNames = [
+            "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
+            "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"
+        ];
+        var jalaliMonthName = jalaliMonthNames[jalaliMonth - 1];
 
+        // Display Jalali date
+        $('#jalali-day').text(jalaliDay);
+        $('#jalali-date').text(jalaliDay + ' ' + jalaliMonthName + ', ' + jalaliYear);
+
+        $('#calendar').fullCalendar({
+            header: {
+                left: '',
+                center: 'title'
+            },
+            buttonText: {
+                today: 'امروز',
+                month: 'ماه'          
+            }        
+        });
     });
 </script>
 

@@ -1,100 +1,94 @@
 <?php require_once 'php_action/core.php'; ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="fa" dir="rtl">
+
 <head>
 
-	<title>Stock Management System</title>
+  <title>سیستم مدیریت موجودی</title>
 
-	<!-- bootstrap -->
-	<link rel="stylesheet" href="assests/bootstrap/css/bootstrap.min.css">
-	<!-- bootstrap theme-->
-	<link rel="stylesheet" href="assests/bootstrap/css/bootstrap-theme.min.css">
-	<!-- font awesome -->
-	<link rel="stylesheet" href="assests/font-awesome/css/font-awesome.min.css">
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.rtl.min.css">
+  <!-- font awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
   <!-- custom css -->
   <link rel="stylesheet" href="custom/css/custom.css">
 
-	<!-- DataTables -->
-  <link rel="stylesheet" href="assests/plugins/datatables/jquery.dataTables.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 
   <!-- file input -->
-  <link rel="stylesheet" href="assests/plugins/fileinput/css/fileinput.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.5/css/fileinput.min.css">
+
+  <!-- fullCalendar 2.2.5-->
+  <!-- <link rel="stylesheet" href="assets/plugins/fullcalendar/fullcalendar.min.css">
+  <link rel="stylesheet" href="assets/plugins/fullcalendar/fullcalendar.print.css" media="print"> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
   <!-- jquery -->
-	<script src="assests/jquery/jquery.min.js"></script>
-  <!-- jquery ui -->  
-  <link rel="stylesheet" href="assests/jquery-ui/jquery-ui.min.css">
-  <script src="assests/jquery-ui/jquery-ui.min.js"></script>
-
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- jquery ui -->
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
   <!-- bootstrap js -->
-	<script src="assests/bootstrap/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    body {
+      direction: rtl;
+    }
+
+    .navbar-brand img {
+      width: 50px;
+      /* Adjust the size as needed */
+      height: auto;
+    }
+  </style>
 
 </head>
+
 <body>
 
-
-	<nav class="navbar navbar-default navbar-static-top">
-		<div class="container">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
       </button>
-      <!-- <a class="navbar-brand" href="#">Brand</a> -->
-	  <a class="navbar-brand" href="#" style="padding:0px;">
-                    <img src="logo.png" alt="">
-                </a>
-    </div>
+      <a class="navbar-brand" href="#" style="padding:0px;">
+        <img src="logo.png" alt="">
+      </a>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">      
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li id="navDashboard" class="nav-item"><a class="nav-link" href="index.php"><i class="fas fa-tachometer-alt"></i> میز کار</a></li>
+          <li class="nav-item dropdown" id="navOrder">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <i class="fas fa-shopping-cart"></i> سفارشات </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li id="topNavAddOrder"><a class="dropdown-item" href="orders.php?o=add"> <i class="fas fa-plus"></i> افزودن سفارش</a></li>
+              <li id="topNavManageOrder"><a class="dropdown-item" href="orders.php?o=manord"> <i class="fas fa-edit"></i> مدیریت سفارشات</a></li>
+            </ul>
+          </li>
+          <?php if (isset($_SESSION['userId']) && $_SESSION['userId'] == 1) { ?>
+            <li id="navBrand" class="nav-item"><a class="nav-link" href="brand.php"><i class="fas fa-tags"></i> برند</a></li>
+            <li id="navCategories" class="nav-item"><a class="nav-link" href="categories.php"> <i class="fas fa-th-list"></i> دسته‌بندی</a></li>
+            <li id="navProduct" class="nav-item"><a class="nav-link" href="product.php"> <i class="fas fa-box"></i> محصول </a></li>
+          <?php } ?>
+          <li class="nav-item dropdown" id="navSetting">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <i class="fas fa-user"></i> </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <?php if (isset($_SESSION['userId']) && $_SESSION['userId'] == 1) { ?>
+                <li id="topNavSetting"><a class="dropdown-item" href="setting.php"> <i class="fas fa-wrench"></i> تنظیمات</a></li>
+                <li id="topNavUser"><a class="dropdown-item" href="user.php"> <i class="fas fa-user-plus"></i> افزودن کاربر</a></li>
+              <?php } ?>
+              <li id="topNavLogout"><a class="dropdown-item" href="logout.php"> <i class="fas fa-sign-out-alt"></i> خروج</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
 
-      <ul class="nav navbar-nav navbar-right">        
-
-      	<li id="navDashboard"><a href="index.php"><i class="glyphicon glyphicon-list-alt"></i>  Dashboard</a></li>        
-        <?php if(isset($_SESSION['userId']) && $_SESSION['userId']==1) { ?>
-        <li id="navBrand"><a href="brand.php"><i class="glyphicon glyphicon-btc"></i>  Brand</a></li>        
-		<?php } ?>
-		<?php if(isset($_SESSION['userId']) && $_SESSION['userId']==1) { ?>
-        <li id="navCategories"><a href="categories.php"> <i class="glyphicon glyphicon-th-list"></i> Category</a></li>        
-		<?php } ?>
-		<?php if(isset($_SESSION['userId']) && $_SESSION['userId']==1) { ?>
-        <li id="navProduct"><a href="product.php"> <i class="glyphicon glyphicon-ruble"></i> Product </a></li> 
-		<?php } ?>
-		
-        <li class="dropdown" id="navOrder">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-shopping-cart"></i> Orders <span class="caret"></span></a>
-          <ul class="dropdown-menu">            
-            <li id="topNavAddOrder"><a href="orders.php?o=add"> <i class="glyphicon glyphicon-plus"></i> Add Orders</a></li>            
-            <li id="topNavManageOrder"><a href="orders.php?o=manord"> <i class="glyphicon glyphicon-edit"></i> Manage Orders</a></li>            
-          </ul>
-        </li> 
-		
-		<?php  if(isset($_SESSION['userId']) && $_SESSION['userId']==1) { ?>
-        <li id="navReport"><a href="report.php"> <i class="glyphicon glyphicon-check"></i> Report </a></li>
-		<?php } ?> 
-    <?php  if(isset($_SESSION['userId']) && $_SESSION['userId']==1) { ?>
-        <li id="importbrand"><a href="importbrand.php"> <i class="glyphicon glyphicon-check"></i> Import Brand </a></li>
-		<?php } ?>   
-        <li class="dropdown" id="navSetting">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-user"></i> <span class="caret"></span></a>
-          <ul class="dropdown-menu">    
-			<?php if(isset($_SESSION['userId']) && $_SESSION['userId']==1) { ?>
-            <li id="topNavSetting"><a href="setting.php"> <i class="glyphicon glyphicon-wrench"></i> Setting</a></li>
-            <li id="topNavUser"><a href="user.php"> <i class="glyphicon glyphicon-wrench"></i> Add User</a></li>
-<?php } ?>              
-            <li id="topNavLogout"><a href="logout.php"> <i class="glyphicon glyphicon-log-out"></i> Logout</a></li>            
-          </ul>
-        </li>        
-           
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-	</nav>
-
-	<div class="container">
+  <div class="container"></div>
